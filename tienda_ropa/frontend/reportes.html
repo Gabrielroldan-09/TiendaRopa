@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reportes — Urban Style </title>
+  <meta name="description" content="Reportes y estadísticas Urban Style. KPIs, evolución de ventas, top prendas y rendimiento por categoría." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👕</text></svg>" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/reportes.css" />
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+  <!-- ==================== SIDEBAR ==================== -->
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">👕</div>
+      <h2>Urban Style</h2>
+      <span>Gestión de Indumentaria</span>
+    </div>
+    <div class="sidebar-nav">
+      <div class="nav-label">Navegación</div>
+      <a href="index.html" class="nav-item"><span class="nav-icon">🏠</span> Inicio</a>
+      <a href="productos.html" class="nav-item"><span class="nav-icon">👕</span> Prendas</a>
+      <a href="ventas.html" class="nav-item"><span class="nav-icon">🛒</span> Ventas</a>
+      <a href="caja.html" class="nav-item"><span class="nav-icon">💰</span> Caja</a>
+      <div class="nav-label">Reportes</div>
+      <a href="reportes.html" class="nav-item active"><span class="nav-icon">📊</span> Reportes</a>
+    </div>
+    <div class="sidebar-footer" id="sidebar-footer">Urban Threads © 2026</div>
+  </nav>
+
+  <!-- ==================== MAIN ==================== -->
+  <div class="main-content">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <div>
+        <h1>📊 Reportes & Estadísticas</h1>
+        <div class="page-subtitle">Análisis de ventas, productos y rendimiento del negocio</div>
+      </div>
+      <!-- Selector de período -->
+      <div class="periodo-selector" role="group" aria-label="Período de reporte">
+        <button class="periodo-btn" data-periodo="hoy"    onclick="cambiarPeriodo('hoy')">Hoy</button>
+        <button class="periodo-btn active" data-periodo="7dias"  onclick="cambiarPeriodo('7dias')">7 días</button>
+        <button class="periodo-btn" data-periodo="30dias" onclick="cambiarPeriodo('30dias')">30 días</button>
+      </div>
+    </header>
+
+    <main class="page-body">
+
+      <!-- ============ KPI CARDS ============ -->
+      <div class="kpi-grid" id="kpi-grid">
+        <!-- Renderizado por JS -->
+        <div class="kpi-card" style="height:120px"><div class="skeleton" style="height:100%;border-radius:12px;"></div></div>
+        <div class="kpi-card" style="height:120px"><div class="skeleton" style="height:100%;border-radius:12px;"></div></div>
+        <div class="kpi-card" style="height:120px"><div class="skeleton" style="height:100%;border-radius:12px;"></div></div>
+        <div class="kpi-card" style="height:120px"><div class="skeleton" style="height:100%;border-radius:12px;"></div></div>
+        <div class="kpi-card" style="height:120px"><div class="skeleton" style="height:100%;border-radius:12px;"></div></div>
+      </div>
+
+      <!-- ============ GRÁFICO EVOLUCIÓN + MÉTODOS DE PAGO ============ -->
+      <div class="charts-grid">
+
+        <!-- Evolución de Ventas -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">📈 Evolución de Ventas</div>
+              <div class="chart-subtitle">Ingresos diarios acumulados en el período</div>
+            </div>
+          </div>
+          <div class="chart-container" id="chart-evolucion-container">
+            <div class="section-loader">
+              <div class="loader-ring" style="width:24px;height:24px;border-width:2px;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Métodos de Pago -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">💳 Métodos de Pago</div>
+              <div class="chart-subtitle">Distribución por canal de pago</div>
+            </div>
+          </div>
+          <div id="metodos-container">
+            <div class="section-loader">
+              <div class="loader-ring" style="width:24px;height:24px;border-width:2px;"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ============ TOP PRODUCTOS + CATEGORÍAS ============ -->
+      <div class="bottom-grid">
+
+        <!-- Top Productos Más Vendidos -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">🏆 Top Productos</div>
+              <div class="chart-subtitle">Los más vendidos por unidades en el período</div>
+            </div>
+          </div>
+          <div id="ranking-container">
+            <div class="section-loader">
+              <div class="loader-ring" style="width:24px;height:24px;border-width:2px;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ventas por Categoría -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">🗂️ Ventas por Categoría de Prenda</div>
+              <div class="chart-subtitle">Ingresos generados según categoría de producto</div>
+            </div>
+          </div>
+          <div class="chart-container-sm" id="chart-categorias-container">
+            <div class="section-loader">
+              <div class="loader-ring" style="width:24px;height:24px;border-width:2px;"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/auth.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/reportes.js"></script>
+</body>
+</html>

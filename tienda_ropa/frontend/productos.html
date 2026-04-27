@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prendas — Urban Style </title>
+  <meta name="description" content="Gestión de prendas Urban Style. CRUD completo con stock y categorías de indumentaria." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👕</text></svg>" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- ==================== SIDEBAR ==================== -->
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">👕</div>
+      <h2>Urban Style</h2>
+      <span>Gestión de Indumentaria</span>
+    </div>
+    <div class="sidebar-nav">
+      <div class="nav-label">Navegación</div>
+      <a href="index.html" class="nav-item">
+        <span class="nav-icon">🏠</span> Inicio
+      </a>
+      <a href="productos.html" class="nav-item active">
+        <span class="nav-icon">👕</span> Prendas
+      </a>
+      <a href="ventas.html" class="nav-item">
+        <span class="nav-icon">🛒</span> Ventas
+      </a>
+      <a href="caja.html" class="nav-item">
+        <span class="nav-icon">💰</span> Caja
+      </a>
+      <div class="nav-label">Reportes</div>
+      <a href="reportes.html" class="nav-item">
+        <span class="nav-icon">📊</span> Reportes
+      </a>
+    </div>
+    <div class="sidebar-footer" id="sidebar-footer">
+      Urban Style © 2026
+    </div>
+  </nav>
+
+  <!-- ==================== MAIN CONTENT ==================== -->
+  <div class="main-content">
+
+    <!-- TOP BAR -->
+    <header class="topbar">
+      <div>
+        <h1>👕 Prendas</h1>
+        <div class="page-subtitle">Gestión de inventario de ropa</div>
+      </div>
+      <button class="btn-primary-custom" onclick="abrirModalNuevo()" id="btn-nuevo-producto">
+        <span>+</span> Nueva Prenda
+      </button>
+    </header>
+
+    <!-- PAGE BODY -->
+    <main class="page-body">
+
+      <!-- STATS -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">👕</div>
+          <div class="stat-value" id="stat-total">—</div>
+          <div class="stat-label">Total Prendas</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🏷️</div>
+          <div class="stat-value" id="stat-categorias">—</div>
+          <div class="stat-label">Categorías</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">⚠️</div>
+          <div class="stat-value text-low-stock" id="stat-stock-bajo">—</div>
+          <div class="stat-label">Stock Bajo (&lt;5)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🚫</div>
+          <div class="stat-value text-low-stock" id="stat-sin-stock">—</div>
+          <div class="stat-label">Sin Stock</div>
+        </div>
+      </div>
+
+      <!-- TABLA DE PRODUCTOS -->
+      <div class="card-custom">
+        <!-- Toolbar -->
+        <div class="flex-between" style="margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
+          <div>
+            <div class="card-title">Lista de Productos</div>
+            <div class="card-subtitle mb-0">Todas las prendas activas en el inventario</div>
+          </div>
+          <div class="search-bar">
+            <span class="search-icon">🔍</span>
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="Buscar por nombre..."
+              autocomplete="off"
+            />
+          </div>
+        </div>
+
+        <!-- Tabla -->
+        <div style="overflow-x: auto;">
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th style="width:80px;">#</th>
+                <th>Nombre</th>
+                <th>Categoría</th>
+                <th>Precio</th>
+                <th>Stock</th>
+                <th style="width:180px;">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="productos-body">
+              <!-- JS renderiza aquí -->
+              <tr>
+                <td colspan="6">
+                  <div class="loader-wrapper"><div class="loader-ring"></div></div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ==================== MODAL: PRODUCTO ==================== -->
+  <div class="modal-overlay" id="modalProducto">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="modal-title">+ Nueva Prenda</h3>
+        <button class="modal-close" onclick="cerrarModal()" aria-label="Cerrar">×</button>
+      </div>
+      <div class="modal-body">
+        <form id="formProducto" novalidate>
+          <input type="hidden" id="productoId" />
+
+          <div class="form-group">
+            <label class="form-label-custom" for="inputNombre">Nombre de la Prenda</label>
+            <input
+              type="text"
+              id="inputNombre"
+              class="form-control-custom"
+              placeholder="Ej: Remera over size, Pantalón de gabardina..."
+              maxlength="150"
+              required
+            />
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+            <div class="form-group">
+              <label class="form-label-custom" for="inputPrecio">Precio ($)</label>
+              <input
+                type="number"
+                id="inputPrecio"
+                class="form-control-custom"
+                placeholder="0.00"
+                min="0.01"
+                step="0.01"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label-custom" for="inputStock">Stock (unidades)</label>
+              <input
+                type="number"
+                id="inputStock"
+                class="form-control-custom"
+                placeholder="0"
+                min="0"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label-custom" for="inputCategoria">Categoría</label>
+            <input
+              type="text"
+              id="inputCategoria"
+              class="form-control-custom"
+              placeholder="Ej: Remeras, Pantalones, Calzado..."
+              list="categorias-list"
+              maxlength="100"
+              required
+            />
+            <datalist id="categorias-list">
+              <option value="Remeras" />
+              <option value="Pantalones" />
+              <option value="Buzos" />
+              <option value="Camperas" />
+              <option value="Camisas" />
+              <option value="Calzado Hombre" />
+              <option value="Calzado Mujer" />
+              <option value="Ropa Interior" />
+              <option value="Accesorios" />
+              <option value="Bermudas" />
+              <option value="Vestidos" />
+              <option value="Faldas" />
+              <option value="Otros" />
+            </datalist>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary-custom" onclick="cerrarModal()">Cancelar</button>
+        <button
+          class="btn-primary-custom"
+          id="modal-submit-btn"
+          onclick="document.getElementById('formProducto').dispatchEvent(new Event('submit'))"
+        >
+          Guardar Prenda
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/auth.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/productos.js"></script>
+</body>
+</html>

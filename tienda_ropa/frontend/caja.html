@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Caja — Urban Style </title>
+  <meta name="description" content="Control de caja diaria Urban Style. Apertura, egresos y cierre de caja." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👕</text></svg>" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/caja.css" />
+</head>
+<body>
+
+  <!-- ==================== SIDEBAR ==================== -->
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">👕</div>
+      <h2>Urban Style</h2>
+      <span>Gestión de Indumentaria</span>
+    </div>
+    <div class="sidebar-nav">
+      <div class="nav-label">Navegación</div>
+      <a href="index.html" class="nav-item"><span class="nav-icon">🏠</span> Inicio</a>
+      <a href="productos.html" class="nav-item"><span class="nav-icon">👕</span> Prendas</a>
+      <a href="ventas.html" class="nav-item"><span class="nav-icon">🛒</span> Ventas</a>
+      <a href="caja.html" class="nav-item active"><span class="nav-icon">💰</span> Caja</a>
+      <div class="nav-label">Reportes</div>
+      <a href="reportes.html" class="nav-item"><span class="nav-icon">📊</span> Reportes</a>
+    </div>
+    <div class="sidebar-footer" id="sidebar-footer">Urban Threads © 2026</div>
+  </nav>
+
+  <!-- ==================== MAIN ==================== -->
+  <div class="main-content">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <div>
+        <h1>💰 Control de Caja</h1>
+        <div class="page-subtitle">Apertura, egresos y cierre de caja diaria</div>
+      </div>
+      <button class="btn-secondary-custom" onclick="cargarEstadoCaja()">
+        🔄 Actualizar
+      </button>
+    </header>
+
+    <main class="page-body">
+
+      <!-- BANNER ESTADO -->
+      <div class="caja-estado-banner sin-caja" id="caja-banner">
+        <div class="banner-left">
+          <div class="banner-icon">⏳</div>
+          <div class="banner-info">
+            <div class="banner-titulo">Cargando estado de caja...</div>
+            <div class="banner-subtitulo">Conectando con el servidor</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LAYOUT PRINCIPAL -->
+      <div class="caja-layout">
+        <!-- Panel izquierdo: contenido dinámico -->
+        <div class="caja-main" id="caja-main">
+          <div class="loader-wrapper"><div class="loader-ring"></div></div>
+        </div>
+
+        <!-- Panel derecho: resumen y acciones -->
+        <div class="acciones-panel" id="caja-acciones">
+          <div class="card-custom" style="text-align:center;padding:40px 20px;">
+            <div class="loader-wrapper" style="padding:10px;"><div class="loader-ring"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HISTORIAL DE CAJAS -->
+      <div style="margin-top:28px;">
+        <div class="card-custom">
+          <div class="card-title" style="margin-bottom:4px;">📋 Historial de Cajas</div>
+          <div class="card-subtitle">Cajas anteriores (click para ver detalle)</div>
+          <div id="historial-cajas" style="display:flex;flex-direction:column;gap:10px;">
+            <div class="loader-wrapper"><div class="loader-ring"></div></div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ==================== MODAL: CONFIRMAR CIERRE ==================== -->
+  <div class="modal-overlay" id="modalCierre">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>🔒 Cerrar Caja</h3>
+        <button class="modal-close" onclick="cerrarModalCierre()">×</button>
+      </div>
+      <div class="modal-body" id="modal-cierre-content">
+        <div class="loader-wrapper"><div class="loader-ring"></div></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary-custom" onclick="cerrarModalCierre()">Cancelar</button>
+        <button class="btn-cerrar-caja" id="btnConfirmarCierre" onclick="ejecutarCierre()" style="width:auto;padding:10px 24px;">
+          🔒 Confirmar Cierre
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL: DETALLE CAJA ==================== -->
+  <div class="modal-overlay" id="modalDetalleCaja">
+    <div class="modal-box" style="max-width:560px;">
+      <div class="modal-header">
+        <h3>📋 Detalle de Caja</h3>
+        <button class="modal-close" onclick="cerrarModalDetalleCaja()">×</button>
+      </div>
+      <div class="modal-body" id="modal-detalle-caja-content" style="max-height:60vh;overflow-y:auto;">
+        <div class="loader-wrapper"><div class="loader-ring"></div></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary-custom" onclick="cerrarModalDetalleCaja()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/auth.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/caja.js"></script>
+</body>
+</html>

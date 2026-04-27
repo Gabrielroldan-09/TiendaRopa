@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ventas — Urban Style </title>
+  <meta name="description" content="Sistema de ventas Urban Style. Carrito de prendas, métodos de pago y registro de ventas." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👕</text></svg>" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/ventas.css" />
+</head>
+<body>
+
+  <!-- ==================== SIDEBAR ==================== -->
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">👕</div>
+      <h2>Urban Style</h2>
+      <span>Gestión de Indumentaria</span>
+    </div>
+    <div class="sidebar-nav">
+      <div class="nav-label">Navegación</div>
+      <a href="index.html" class="nav-item"><span class="nav-icon">🏠</span> Inicio</a>
+      <a href="productos.html" class="nav-item"><span class="nav-icon">👕</span> Prendas</a>
+      <a href="ventas.html" class="nav-item active"><span class="nav-icon">🛒</span> Ventas</a>
+      <a href="caja.html" class="nav-item"><span class="nav-icon">💰</span> Caja</a>
+      <div class="nav-label">Reportes</div>
+      <a href="reportes.html" class="nav-item"><span class="nav-icon">📊</span> Reportes</a>
+    </div>
+    <div class="sidebar-footer" id="sidebar-footer">Urban Threads © 2026</div>
+  </nav>
+
+  <!-- ==================== MAIN ==================== -->
+  <div class="main-content">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <div>
+        <h1>🛒 Nueva Venta</h1>
+        <div class="page-subtitle">Seleccioná prendas y confirmá la venta</div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;">
+        <button class="btn-secondary-custom" onclick="vaciarCarrito()">
+          🗑 Vaciar carrito
+        </button>
+        <a href="#historial" class="btn-secondary-custom" style="text-decoration:none;">
+          📋 Ver historial
+        </a>
+      </div>
+    </header>
+
+    <main class="page-body">
+
+      <!-- ESTADÍSTICAS DEL DÍA -->
+      <div class="stats-grid" style="margin-bottom:24px;">
+        <div class="stat-card">
+          <div class="stat-icon">📈</div>
+          <div class="stat-value" id="stat-ventas-hoy">—</div>
+          <div class="stat-label">Ventas Hoy</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">💰</div>
+          <div class="stat-value text-price" id="stat-monto-hoy" style="font-size:18px;">—</div>
+          <div class="stat-label">Total del Día</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">💵</div>
+          <div class="stat-value text-price" id="stat-efectivo-hoy" style="font-size:18px;">—</div>
+          <div class="stat-label">En Efectivo</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📲</div>
+          <div class="stat-value text-price" id="stat-digital-hoy" style="font-size:18px;">—</div>
+          <div class="stat-label">Digital (Transf./Tarjeta)</div>
+        </div>
+      </div>
+
+      <!-- LAYOUT: PRODUCTOS + CARRITO -->
+      <div class="ventas-layout">
+
+        <!-- PANEL IZQUIERDO: CATÁLOGO -->
+        <div class="productos-panel">
+          <div class="card-custom" style="padding:20px;">
+            <div class="flex-between" style="margin-bottom:14px;flex-wrap:wrap;gap:10px;">
+              <div class="card-title" style="margin:0;">Catálogo de Prendas</div>
+              <div class="search-bar" style="max-width:260px;">
+                <span class="search-icon">🔍</span>
+                <input
+                  type="text"
+                  id="buscar-producto"
+                  placeholder="Buscar producto..."
+                  autocomplete="off"
+                />
+              </div>
+            </div>
+
+            <!-- Tabs de categoría -->
+            <div class="categoria-tabs" id="categoria-tabs" style="margin-bottom:16px;">
+              <div class="loader-ring" style="width:20px;height:20px;border-width:2px;"></div>
+            </div>
+
+            <!-- Grid de productos -->
+            <div class="productos-grid" id="productos-grid">
+              <div style="grid-column:1/-1;">
+                <div class="loader-wrapper"><div class="loader-ring"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PANEL DERECHO: CARRITO -->
+        <div class="carrito-panel">
+          <div class="carrito-box">
+            <!-- Header del carrito -->
+            <div class="carrito-header">
+              <h2>🛒 Carrito</h2>
+              <span class="carrito-count" id="carrito-count">0</span>
+            </div>
+
+            <!-- Items -->
+            <div class="carrito-items" id="carrito-items">
+              <div class="carrito-empty">
+                <div class="empty-icon">🛒</div>
+                <p>El carrito está vacío.<br>Hacé click en un producto para agregar.</p>
+              </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="carrito-footer">
+              <!-- Total -->
+              <div class="total-row">
+                <span class="total-label">TOTAL A PAGAR</span>
+                <span class="total-value" id="carrito-total">$0,00</span>
+              </div>
+
+              <!-- Método de pago -->
+              <div style="margin-bottom:10px;">
+                <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);margin-bottom:8px;">
+                  Método de Pago
+                </div>
+                <div class="metodo-pago-grid">
+                  <button class="mp-btn selected" data-metodo="efectivo" onclick="seleccionarMetodoPago('efectivo')">
+                    <span class="mp-icon">💵</span>
+                    <span class="mp-label">Efectivo</span>
+                  </button>
+                  <button class="mp-btn" data-metodo="transferencia" onclick="seleccionarMetodoPago('transferencia')">
+                    <span class="mp-icon">📲</span>
+                    <span class="mp-label">Transfer.</span>
+                  </button>
+                  <button class="mp-btn" data-metodo="tarjeta" onclick="seleccionarMetodoPago('tarjeta')">
+                    <span class="mp-icon">💳</span>
+                    <span class="mp-label">Tarjeta</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Botón confirmar -->
+              <button
+                class="btn-confirmar-venta"
+                id="btn-confirmar"
+                onclick="confirmarVenta()"
+                disabled
+              >
+                ✅ Confirmar Venta
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /ventas-layout -->
+
+      <!-- ==================== HISTORIAL ==================== -->
+      <div class="historial-section" id="historial">
+        <div class="card-custom">
+          <div class="flex-between" style="margin-bottom:18px;flex-wrap:wrap;gap:12px;">
+            <div>
+              <div class="card-title">📋 Historial de Ventas</div>
+              <div class="card-subtitle mb-0">Últimas 30 ventas registradas</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <label style="font-size:12px;color:var(--text-muted);">Filtrar por fecha:</label>
+              <input
+                type="date"
+                id="filtro-fecha"
+                class="form-control-custom"
+                style="width:auto;padding:7px 12px;"
+              />
+            </div>
+          </div>
+
+          <div style="overflow-x:auto;">
+            <table class="table-custom historial-tabla">
+              <thead>
+                <tr>
+                  <th style="width:80px;">#</th>
+                  <th>Fecha y Hora</th>
+                  <th>Método</th>
+                  <th>Productos</th>
+                  <th>Total</th>
+                  <th style="width:80px;">Detalle</th>
+                </tr>
+              </thead>
+              <tbody id="historial-body">
+                <tr>
+                  <td colspan="6">
+                    <div class="loader-wrapper"><div class="loader-ring"></div></div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div><!-- /main-content -->
+
+  <!-- ==================== MODAL: DETALLE VENTA ==================== -->
+  <div class="modal-overlay" id="modalDetalleVenta">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>🧾 Detalle de Venta</h3>
+        <button class="modal-close" onclick="cerrarModalDetalle()">×</button>
+      </div>
+      <div class="modal-body" id="modal-detalle-content">
+        <div class="loader-wrapper"><div class="loader-ring"></div></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary-custom" onclick="cerrarModalDetalle()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/auth.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/ventas.js"></script>
+</body>
+</html>

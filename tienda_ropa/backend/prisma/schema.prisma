@@ -1,0 +1,115 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// ==================== USUARIOS ====================
+model Usuario {
+  id        Int      @id @default(autoincrement())
+  nombre    String   @db.VarChar(100)
+  email     String   @unique @db.VarChar(150)
+  password  String   @db.VarChar(255)
+  createdAt DateTime @default(now())
+
+  // Relaciones
+  productos Producto[]
+  ventas    Venta[]
+  cajas     Caja[]
+
+  @@map("usuarios")
+}
+
+// ==================== MÓDULO 1: PRODUCTOS ====================
+model Producto {
+  id        Int      @id @default(autoincrement())
+  nombre    String   @db.VarChar(150)
+  precio    Decimal  @db.Decimal(10, 2)
+  stock     Int      @default(0)
+  categoria String   @db.VarChar(100)
+  activo    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relaciones
+  detalleVentas DetalleVenta[]
+  usuario       Usuario @relation(fields: [usuarioId], references: [id])
+  usuarioId     Int
+
+  @@map("productos")
+}
+
+// ==================== MÓDULO 2: VENTAS ====================
+model Venta {
+  id            Int      @id @default(autoincrement())
+  total         Decimal  @db.Decimal(10, 2)
+  metodoPago    String   @db.VarChar(50)  // efectivo, transferencia, tarjeta
+  observaciones String?  @db.Text
+  createdAt     DateTime @default(now())
+
+  // Relaciones
+  detalles      DetalleVenta[]
+  caja          Caja?         @relation(fields: [cajaId], references: [id])
+  cajaId        Int?
+  usuario       Usuario @relation(fields: [usuarioId], references: [id])
+  usuarioId     Int
+
+  @@map("ventas")
+}
+
+model DetalleVenta {
+  id         Int     @id @default(autoincrement())
+  cantidad   Int
+  precioUnit Decimal @db.Decimal(10, 2)
+  subtotal   Decimal @db.Decimal(10, 2)
+
+  // Relaciones
+  venta      Venta    @relation(fields: [ventaId], references: [id], onDelete: Cascade)
+  ventaId    Int
+  producto   Producto @relation(fields: [productoId], references: [id])
+  productoId Int
+
+  @@map("detalle_ventas")
+}
+
+// ==================== MÓDULO 3: CAJA ====================
+model Caja {
+  id           Int       @id @default(autoincrement())
+  montoInicial Decimal   @db.Decimal(10, 2)
+  montoFinal   Decimal?  @db.Decimal(10, 2)
+  totalVentas  Decimal?  @db.Decimal(10, 2)
+  totalEgresos Decimal?  @db.Decimal(10, 2)
+  estado       String    @default("abierta") @db.VarChar(20)  // abierta, cerrada
+  apertura     DateTime  @default(now())
+  cierre       DateTime?
+  observaciones String?  @db.Text
+
+  // Relaciones
+  ventas    Venta[]
+  egresos   Egreso[]
+  usuario   Usuario @relation(fields: [usuarioId], references: [id])
+  usuarioId Int
+
+  @@map("cajas")
+}
+
+model Egreso {
+  id          Int      @id @default(autoincrement())
+  concepto    String   @db.VarChar(200)
+  monto       Decimal  @db.Decimal(10, 2)
+  createdAt   DateTime @default(now())
+
+  // Relaciones
+  caja        Caja @relation(fields: [cajaId], references: [id])
+  cajaId      Int
+
+  @@map("egresos")
+}

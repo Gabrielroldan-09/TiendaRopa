@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Urban Style  — Sistema de Gestión</title>
+  <meta name="description" content="Sistema de gestión de indumentaria Urban Style. Panel principal." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👕</text></svg>" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .hero-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 60vh;
+      text-align: center;
+      padding: 40px;
+    }
+    .hero-icon {
+      font-size: 72px;
+      margin-bottom: 24px;
+      animation: float 3s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-10px); }
+    }
+    .hero-title {
+      font-size: 38px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff 0%, var(--color-primary-light) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 10px;
+    }
+    .hero-subtitle {
+      font-size: 15px;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+    }
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      width: 100%;
+      max-width: 900px;
+    }
+    .module-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 24px;
+      text-align: center;
+      cursor: pointer;
+      text-decoration: none;
+      transition: var(--transition);
+      display: block;
+    }
+    .module-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--border-hover);
+      box-shadow: var(--shadow-glow);
+    }
+    .module-card .mod-icon {
+      font-size: 36px;
+      margin-bottom: 14px;
+    }
+    .module-card .mod-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+    .module-card .mod-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .module-card.active-mod { border-color: rgba(139,26,42,0.5); }
+    .module-card.coming-soon { opacity: 0.5; cursor: default; }
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">👕</div>
+      <h2>Urban Style</h2>
+      <span>Gestión de Indumentaria</span>
+    </div>
+    <div class="sidebar-nav">
+      <div class="nav-label">Navegación</div>
+      <a href="index.html" class="nav-item active">
+        <span class="nav-icon">🏠</span> Inicio
+      </a>
+      <a href="productos.html" class="nav-item">
+        <span class="nav-icon">👕</span> Prendas
+      </a>
+      <a href="ventas.html" class="nav-item">
+        <span class="nav-icon">🛒</span> Ventas
+      </a>
+      <a href="caja.html" class="nav-item">
+        <span class="nav-icon">💰</span> Caja
+      </a>
+      <div class="nav-label">Reportes</div>
+      <a href="reportes.html" class="nav-item">
+        <span class="nav-icon">📊</span> Reportes
+      </a>
+    </div>
+    <div class="sidebar-footer" id="sidebar-footer">
+      Urban Style © 2026
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <div class="main-content">
+    <header class="topbar">
+      <div>
+        <h1>🏠 Panel Principal</h1>
+        <div class="page-subtitle">Seleccioná un módulo para comenzar</div>
+      </div>
+      <div style="font-size: 12px; color: var(--text-muted); text-align: right;">
+        <span id="fechaHora"></span>
+      </div>
+    </header>
+
+    <div class="page-body">
+      <div class="hero-section">
+        <div class="hero-icon">👕</div>
+        <h1 class="hero-title">Urban Style</h1>
+        <p class="hero-subtitle">Sistema integral de gestión de ventas, stock y caja para tu tienda</p>
+
+        <div class="modules-grid">
+          <a href="productos.html" class="module-card active-mod">
+            <div class="mod-icon">👕</div>
+            <div class="mod-name">Prendas</div>
+            <div class="mod-desc">Gestión completa de prendas, stock y categorías</div>
+          </a>
+          <a href="ventas.html" class="module-card">
+            <div class="mod-icon">🛒</div>
+            <div class="mod-name">Ventas</div>
+            <div class="mod-desc">Sistema de ventas con carrito y métodos de pago</div>
+          </a>
+          <a href="caja.html" class="module-card">
+            <div class="mod-icon">💰</div>
+            <div class="mod-name">Caja</div>
+            <div class="mod-desc">Control diario de caja, apertura y cierre</div>
+          </a>
+          <a href="reportes.html" class="module-card">
+            <div class="mod-icon">📊</div>
+            <div class="mod-name">Reportes</div>
+            <div class="mod-desc">Estadísticas, top productos, evolución de ventas y análisis</div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script>
+    // Reloj en tiempo real
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('fechaHora').textContent = now.toLocaleString('es-AR', {
+        weekday: 'long', day: '2-digit', month: 'long', year: 'numeric',
+        hour: '2-digit', minute: '2-digit', second: '2-digit'
+      });
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+  </script>
+</body>
+</html>

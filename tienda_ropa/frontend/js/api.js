@@ -4,7 +4,7 @@
 // Incluye token JWT en cada request
 // =============================================
 
-const API_BASE = 'http://localhost:3001';
+const API_BASE = '';
 
 // Función base para fetch con manejo de errores y auth
 async function apiFetch(url, options = {}) {
